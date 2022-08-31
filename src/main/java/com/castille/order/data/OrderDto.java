@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 
 @Data
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id", scope = OrderDto.class)
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = OrderDto.class)
 public class OrderDto implements Serializable {
     @Schema(hidden = true)
     private Long id;

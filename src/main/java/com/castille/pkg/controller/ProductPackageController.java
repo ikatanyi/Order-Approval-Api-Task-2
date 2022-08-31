@@ -19,7 +19,7 @@ import javax.validation.Valid;
  */
 @RestController
 @Slf4j
-@RequestMapping("/api/productPackage")
+@RequestMapping("/api/product-package")
 @RequiredArgsConstructor
 public class ProductPackageController {
 

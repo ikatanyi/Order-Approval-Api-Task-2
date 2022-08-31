@@ -23,7 +23,6 @@ public class CustomerDto {
     private String email;
     private String phoneNumber;
     @Schema(hidden = true)
-    @Formula("concat(first_name, ' ', last_name)")
     private String fullName;
 
     public Customer toCustomer(){

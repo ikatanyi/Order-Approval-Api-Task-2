@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
 @Entity
 @Getter
 @Setter
-@Table(name = "order")
+@Table(name = "orders")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "id")
 public class Order implements Serializable {
     @Id
