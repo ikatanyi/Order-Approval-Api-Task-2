@@ -1,10 +1,14 @@
 package com.castille.order.service;
 
 import com.castille.customer.model.Customer;
+import com.castille.customer.model.specification.CustomerSpecification;
 import com.castille.customer.service.CustomerService;
 import com.castille.exception.APIException;
+import com.castille.mail.EmailService;
 import com.castille.order.data.OrderDto;
 import com.castille.order.model.Order;
+import com.castille.order.model.enumeration.Status;
+import com.castille.order.model.specification.OrderSpecification;
 import com.castille.order.repository.OrderRepository;
 import com.castille.pkg.model.ProductPackage;
 import com.castille.pkg.service.ProductPackageService;
@@ -19,6 +23,7 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +47,8 @@ public class OrderService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(OrderService.class);
 
-    private final Queue qu;
+    private final EmailService emailService;
 
-//
     @Transactional
     @RabbitListener(queues = "#{qu.getName()}")
     public void createOrder(OrderDto orderDto) {
@@ -52,14 +56,17 @@ public class OrderService {
         LOGGER.info("Order received is..\n" + orderDto.toString());
         Order order = orderDto.toOrder();
 
-//        Product product = productService.fetchProductOrThrow(orderDto.getProductId());
-//        ProductPackage productPackage = productPackageService.fetchProductPackageOrThrow(orderDto.getProductPackageId());
-//        Customer customer = customerService.fetchCustomerByIdOrThrow(orderDto.getCustomerId());
-//
-//        order.setProduct(product);
-//        order.setProductPackage(productPackage);
-//        order.setCustomer(customer);
-//        return orderRepository.save(order);
+        Product product = productService.fetchProductOrThrow(orderDto.getProductId());
+        ProductPackage productPackage = productPackageService.fetchProductPackageOrThrow(orderDto.getProductPackageId());
+        Customer customer = customerService.fetchCustomerByIdOrThrow(orderDto.getCustomerId());
+
+        order.setProduct(product);
+        order.setProductPackage(productPackage);
+        order.setCustomer(customer);
+        order =  orderRepository.save(order);
+
+        String subject = "Order Request";
+        emailService.sendSimpleMessage(subject, order.toEmailOrder());
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
@@ -77,14 +84,22 @@ public class OrderService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+    public Order updateOrderStatus(Long id, Status status) {
+        Order order = fetchOrderOrThrow(id);
+        order.setStatus(status);
+        return orderRepository.save(order);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
     public Boolean deleteOrder(Long id) {
         Order order = fetchOrderOrThrow(id);
         orderRepository.delete(order);
         return true;
     }
 
-    public Page<Order> fetchOrders(Pageable pageable) {
-        Page<Order> orders = orderRepository.findAll(pageable);
+    public Page<Order> fetchOrders(Status status, Long customerId, String productName, String packageName,Pageable pageable) {
+        Specification<Order> spec = OrderSpecification.createSpecification(status, customerId, productName, packageName);
+        Page<Order> orders = orderRepository.findAll(spec, pageable);
         return orders;
     }
 

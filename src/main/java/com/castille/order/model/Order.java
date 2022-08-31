@@ -2,6 +2,7 @@ package com.castille.order.model;
 
 import com.castille.customer.model.Customer;
 import com.castille.order.data.OrderDto;
+import com.castille.order.model.enumeration.Status;
 import com.castille.product.data.ProductDto;
 import com.castille.pkg.model.ProductPackage;
 import com.castille.product.model.Product;
@@ -13,6 +14,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,8 @@ public class Order implements Serializable {
     @ManyToOne
     @JoinColumn(name = "product_package_id")
     private ProductPackage productPackage;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
 
     public OrderDto toOrderDto(){
@@ -53,6 +57,19 @@ public class Order implements Serializable {
         orderDto.setProductName(this.getProduct().getDescription());
         orderDto.setProductPackage(this.getProductPackage().getDescription());
         orderDto.setCustomerName(this.getCustomer().getFirstName() + " " + this.getCustomer().getLastName());
+        orderDto.setStatus(this.getStatus());
         return orderDto;
+    }
+
+    public String toEmailOrder(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("Order placed on: " + LocalDate.now()+ "\n");
+        sb.append("Product: " + this.getProduct().getDescription() + "\n");
+        sb.append("Product Package: " + this.getProductPackage().getDescription() + "\n");
+        sb.append("Customer: " + this.getCustomer().getFirstName() + " " + this.getCustomer().getLastName() + "\n");
+        sb.append("Installation Address: " + this.getInstallationAddress() + "\n");
+        sb.append("Installation Date: " + this.getInstallationTime() + " at " + this.getInstallationAddress() + "\n");
+        return sb.toString();
+
     }
 }

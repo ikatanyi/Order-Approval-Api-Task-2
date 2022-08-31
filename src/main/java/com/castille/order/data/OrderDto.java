@@ -1,6 +1,7 @@
 package com.castille.order.data;
 
 import com.castille.order.model.Order;
+import com.castille.order.model.enumeration.Status;
 import com.castille.pkg.data.ProductPackageDto;
 import com.castille.product.model.Product;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
@@ -10,6 +11,8 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
@@ -40,11 +43,16 @@ public class OrderDto implements Serializable {
     private String productPackage;
     @Schema(hidden = true)
     private String customerName;
+    @Schema(hidden = true)
+    @Enumerated(EnumType.STRING)
+    private Status status = Status.PENDING;
+
 
     public Order toOrder(){
         Order order = new Order();
         order.setInstallationAddress(this.getInstallationAddress());
         order.setInstallationTime(this.getInstallationTime());
+        order.setStatus(this.getStatus());
         return order;
     }
 }

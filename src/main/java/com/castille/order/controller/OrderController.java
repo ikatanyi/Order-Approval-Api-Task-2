@@ -2,6 +2,7 @@ package com.castille.order.controller;
 
 import com.castille.order.data.OrderDto;
 import com.castille.order.model.Order;
+import com.castille.order.model.enumeration.Status;
 import com.castille.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -62,6 +63,14 @@ public class OrderController {
 
     }
 
+    @PutMapping("/{id}/marker-checker/{status}")
+    public ResponseEntity<?> updateOrder(@PathVariable(value = "id") Long id, @PathVariable(value = "status") Status status) {
+
+        Order order = service.updateOrderStatus(id, status);
+        return ResponseEntity.ok(order.toOrderDto());
+
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOrder(@PathVariable(value = "id") Long id) {
 
@@ -72,12 +81,16 @@ public class OrderController {
 
     @GetMapping
     public ResponseEntity<?> getAllOrders(
+            @RequestParam(value = "status", defaultValue = "0",required = false) Status status,
+            @RequestParam(value = "customerId",required = false) Long customerId,
+            @RequestParam(value = "productName",required = false) String productName,
+            @RequestParam(value = "packageName",required = false) String packageName,
             @RequestParam(value = "page", defaultValue = "0",required = false) Integer page,
             @RequestParam(value = "pageSize", defaultValue = "20",required = false) Integer size) {
         page = page>=1 ? page-1 : page;
         Pageable pageable = PageRequest.of(page, size);
 
-        Page<OrderDto> pagedList = service.fetchOrders(pageable).map(u -> u.toOrderDto());
+        Page<OrderDto> pagedList = service.fetchOrders(status, customerId, productName, packageName,pageable).map(u -> u.toOrderDto());
         return ResponseEntity.ok(pagedList);
     }
 
