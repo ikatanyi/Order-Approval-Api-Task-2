@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * @author Kennedy Ikatanyi
  */
 @RestController
-@Slf4j
 @RequestMapping("/api/customer")
 @RequiredArgsConstructor
 public class CustomerController {

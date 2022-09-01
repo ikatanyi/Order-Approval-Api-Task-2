@@ -1,31 +1,26 @@
 package com.castille.config;
 
+import lombok.Data;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
-@Configuration
+@Data
+@Component
+@ConfigurationProperties("rabbitmq")
 public class RabbitMqConfig {
-
-
-    @Value("${rabbitmq.queue}")
-    private String qName;
-
-
-    @Value("${rabbitmq.exchange}")
+    private String queue;
     private String exchange;
-
-
-    @Value("${rabbitmq.routingkey}")
-    private String routingKey;
+    private String routingkey;
 
     @Bean
     Queue qu() {
-        return new Queue(qName, Boolean.FALSE);
+        return new Queue(queue, Boolean.FALSE);
     }
 
     @Bean
@@ -35,6 +30,6 @@ public class RabbitMqConfig {
 
     @Bean
     Binding binding(final Queue q, final TopicExchange topicExchange) {
-        return BindingBuilder.bind(q).to(topicExchange).with(routingKey);
+        return BindingBuilder.bind(q).to(topicExchange).with(routingkey);
     }
 }

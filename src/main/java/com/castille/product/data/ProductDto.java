@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 public class ProductDto {
     @Schema(hidden = true)
     private Long id;
+    @Schema(description = "The type of resources", example = "Internet/Tv/Telephone/Mobile")
     private String description;
     private List<ProductPackageDto> productPackages=new ArrayList<>();
 

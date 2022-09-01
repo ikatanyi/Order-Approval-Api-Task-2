@@ -2,8 +2,6 @@ package com.castille.order.data;
 
 import com.castille.order.model.Order;
 import com.castille.order.model.enumeration.Status;
-import com.castille.pkg.data.ProductPackageDto;
-import com.castille.product.model.Product;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
@@ -13,7 +11,6 @@ import lombok.Data;
 
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.LocalDateTime;

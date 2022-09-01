@@ -19,7 +19,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
+
     private final CustomerRepository customerRepository;
+
 
     public List<Customer> findAll() {
         return customerRepository.findAll();
@@ -44,7 +46,6 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(Long id, CustomerDto customerDto) {
-        LocalDate now = LocalDate.now();
         Customer customer = customerRepository.findById(id).orElseThrow(() -> APIException.notFound("Customer identified by id {0} not found", id));
         customer.setFirstName(customerDto.getFirstName());
         customer.setLastName(customerDto.getLastName());

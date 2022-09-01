@@ -23,7 +23,6 @@ public class Product implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @Schema(description = "The type of resources", example = "Internet/Tv/Telephone/Mobile")
     private String description;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -44,7 +43,7 @@ public class Product implements Serializable {
         productDto.setId(this.getId());
         productDto.setDescription(this.getDescription());
         //UNCOMMENT THIS LINE TO GET THE PACKAGES IN THE PRODUCT
-        productDto.setProductPackages(this.packages.stream().map(ProductPackage::toProductPackageDto).collect(Collectors.toList()));
+//        productDto.setProductPackages(this.packages.stream().map(ProductPackage::toProductPackageDto).collect(Collectors.toList()));
         return productDto;
     }
 }
