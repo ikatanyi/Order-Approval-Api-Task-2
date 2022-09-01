@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 
 @SpringBootApplication
+//@RefreshScope
 public class OrderApiApplication {
 
     // start everything
