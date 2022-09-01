@@ -43,7 +43,7 @@ public class Product implements Serializable {
         productDto.setId(this.getId());
         productDto.setDescription(this.getDescription());
         //UNCOMMENT THIS LINE TO GET THE PACKAGES IN THE PRODUCT
-//        productDto.setProductPackages(this.packages.stream().map(ProductPackage::toProductPackageDto).collect(Collectors.toList()));
+        productDto.setProductPackages(this.packages.stream().map(ProductPackage::toProductPackageDto).collect(Collectors.toList()));
         return productDto;
     }
 }
