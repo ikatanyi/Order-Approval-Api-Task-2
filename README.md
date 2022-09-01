@@ -202,7 +202,7 @@ https://github.com/ikatanyi/spring-config-server.git
     mvn spring-boot:run
  *Run packaged jar*
 ```
-    java -jar dir-path\apocalypse\target\apocalypse-0.0.1-SNAPSHOT.jar
+    
 ```
 ## OTHER
   1. *The project contains config-repo where settings are hosted check link below*
