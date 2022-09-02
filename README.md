@@ -178,7 +178,7 @@ credentials are located in config-datastore on github, link shared on email
 ```
 productDto.setProductPackages(this.packages.stream().map(ProductPackage::toProductPackageDto).collect(Collectors.toList()));
 ```
-2. **Creation of system users was beyond scope of the project hence configuring password and usernames to authenticate endpoints.**
+2. **Creation of system users was beyond scope of the project hence configuring password and usernames to authenticate endpoints. For an advanced system this can be its own microservice and we can implement using JWT and Oauth 2.0**
 
  
 3. **Orders are made by customers but product and packages are set by agents hence order creation endpoint has security for user while the rest are administrator protected**
@@ -206,6 +206,11 @@ https://github.com/ikatanyi/spring-config-server.git
 ```
 ## OTHER
   1. *The project contains config-repo where settings are hosted check link below*
+```
+    
+```
+## Security
+1. *The project uses basic auth for endpoint authentication using spring security. 
 
 https://github.com/ikatanyi/config-repo.git
 ## Licence
